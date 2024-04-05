@@ -17,7 +17,7 @@ const createNew = async (blog) => {
   };
 
   try {
-    const response = await axios.post(baseUrl, blog, config);
+    return await axios.post(baseUrl, blog, config);
   } catch (error) {
     console.log(error.message);
   }

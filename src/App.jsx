@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Blog, NewBlog } from "./components/Blog";
 import Login from "./components/Login";
+import { EventMessage } from "./components/EventMessage";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 
@@ -9,7 +10,7 @@ const App = () => {
   const [username, setUsername] = useState([]);
   const [password, setPassword] = useState([]);
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [eventMessage, setEventMessage] = useState(null);
   const [creationStatus, setCreationStatus] = useState([]);
 
   useEffect(() => {
@@ -24,6 +25,13 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
+
+  const handleMessageDisplayEvent = async (message) => {
+    setEventMessage(message);
+    setTimeout(() => {
+      setEventMessage(null);
+    }, 5000);
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -41,28 +49,44 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      handleMessageDisplayEvent({
+        content: "Wrong credentials",
+        type: "error",
+      });
     }
   };
 
   const handleLogout = async () => {
+    let loggingOut = user;
     window.localStorage.removeItem("loggedBlogAppUser");
     setUser(null);
+    handleMessageDisplayEvent({
+      content: `Logged out user ${loggingOut.username}`,
+    });
   };
 
   const createBlog = async (blog) => {
-    await blogService.createNew(blog);
-    setCreationStatus("success");
+    try {
+      const response = await blogService.createNew(blog);
+      const addedBlog = response.data;
+      setCreationStatus("success");
+      handleMessageDisplayEvent({
+        content: `Added a new blog: ${addedBlog.title} by author ${addedBlog.author}`,
+      });
+    } catch (error) {
+      console.log(error.message);
+      handleMessageDisplayEvent({
+        content: "Error on adding a blog",
+        type: "error",
+      });
+    }
   };
 
   return (
     <div>
+      <EventMessage key={eventMessage?.content} message={eventMessage} />
       {!user ? (
         <div>
-          {errorMessage}
           <Login
             handleLogin={handleLogin}
             username={username}
