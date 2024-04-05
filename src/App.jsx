@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
+import { Blog, NewBlog } from "./components/Blog";
 import Login from "./components/Login";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
@@ -10,6 +10,7 @@ const App = () => {
   const [password, setPassword] = useState([]);
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [creationStatus, setCreationStatus] = useState([]);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -17,13 +18,15 @@ const App = () => {
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedBlogAppUser");
-    loggedUser && setUser(JSON.parse(loggedUser));
-    console.log("appuser", loggedUser);
+    if (loggedUser) {
+      const user = JSON.parse(loggedUser);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
   }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("logging in with", username, password);
 
     try {
       const user = await loginService.login({
@@ -32,6 +35,7 @@ const App = () => {
       });
 
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
+      blogService.setToken(user.token);
 
       setUser(user);
       setUsername("");
@@ -47,6 +51,11 @@ const App = () => {
   const handleLogout = async () => {
     window.localStorage.removeItem("loggedBlogAppUser");
     setUser(null);
+  };
+
+  const createBlog = async (blog) => {
+    await blogService.createNew(blog);
+    setCreationStatus("success");
   };
 
   return (
@@ -66,6 +75,10 @@ const App = () => {
         <div>
           <h2>blogs</h2>
           {user.name} logged in <button onClick={handleLogout}>logout</button>
+          <NewBlog
+            createThisBlog={createBlog}
+            creationStatus={creationStatus}
+          ></NewBlog>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
