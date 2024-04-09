@@ -1,10 +1,40 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 
-export const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>
-);
+export const Blog = ({ blog }) => {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const toggleDetailVisibility = () => {
+    setShowDetails(!showDetails);
+  };
+
+  const blogWrapStyle = {
+    display: "flex",
+    margin: "2px",
+    padding: "2px",
+    borderColor: "black",
+    borderStyle: "solid",
+    borderWidth: "3px",
+    borderRadius: "5px",
+  };
+
+  return (
+    <div style={blogWrapStyle}>
+      <button onClick={toggleDetailVisibility}>
+        {showDetails ? "close" : "view"}
+      </button>
+      {showDetails ? (
+        <div>
+          <div>title: {blog.title}</div>
+          <div>author: {blog.author}</div>
+          <div>url: {blog.url}</div>
+          <div>likes: {blog.likes}</div>
+        </div>
+      ) : (
+        <div>{blog.title}</div>
+      )}
+    </div>
+  );
+};
 
 export const NewBlog = forwardRef(({ createThisBlog }, ref) => {
   const [author, setAuthor] = useState([]);

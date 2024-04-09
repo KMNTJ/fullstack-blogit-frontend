@@ -87,7 +87,6 @@ const App = () => {
     blogFormTogglingRef.current.toggleDisplay();
   };
 
-
   return (
     <div>
       <EventMessage key={eventMessage?.content} message={eventMessage} />
