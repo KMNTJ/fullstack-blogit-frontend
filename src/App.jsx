@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Blog, NewBlog } from "./components/Blog";
+import { Togglable } from "./components/Togglable";
 import Login from "./components/Login";
 import { EventMessage } from "./components/EventMessage";
 import loginService from "./services/login";
@@ -64,11 +65,14 @@ const App = () => {
       content: `Logged out user ${loggingOut.username}`,
     });
   };
+  
+  const blogFormTogglingRef = useRef();
 
   const createBlog = async (blog) => {
     try {
       const response = await blogService.createNew(blog);
       const addedBlog = response.data;
+      setBlogs(blogs.concat(addedBlog));
       setCreationStatus("success");
       handleMessageDisplayEvent({
         content: `Added a new blog: ${addedBlog.title} by author ${addedBlog.author}`,
@@ -80,7 +84,9 @@ const App = () => {
         type: "error",
       });
     }
+    blogFormTogglingRef.current.toggleDisplay();
   };
+
 
   return (
     <div>
@@ -99,10 +105,15 @@ const App = () => {
         <div>
           <h2>blogs</h2>
           {user.name} logged in <button onClick={handleLogout}>logout</button>
-          <NewBlog
-            createThisBlog={createBlog}
-            creationStatus={creationStatus}
-          ></NewBlog>
+          <Togglable
+            buttonLabel={"Open Blog creation"}
+            ref={blogFormTogglingRef}
+          >
+            <NewBlog
+              createThisBlog={createBlog}
+              creationStatus={creationStatus}
+            ></NewBlog>
+          </Togglable>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
