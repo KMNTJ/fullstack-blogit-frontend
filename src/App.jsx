@@ -12,7 +12,6 @@ const App = () => {
   const [password, setPassword] = useState([]);
   const [user, setUser] = useState(null);
   const [eventMessage, setEventMessage] = useState(null);
-  const [creationStatus, setCreationStatus] = useState([]);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -65,15 +64,16 @@ const App = () => {
       content: `Logged out user ${loggingOut.username}`,
     });
   };
-  
+
   const blogFormTogglingRef = useRef();
+  const clearBlogCreationFieldsRef = useRef();
 
   const createBlog = async (blog) => {
     try {
       const response = await blogService.createNew(blog);
       const addedBlog = response.data;
       setBlogs(blogs.concat(addedBlog));
-      setCreationStatus("success");
+      clearBlogCreationFieldsRef.current.clearInputFields()
       handleMessageDisplayEvent({
         content: `Added a new blog: ${addedBlog.title} by author ${addedBlog.author}`,
       });
@@ -110,8 +110,8 @@ const App = () => {
             ref={blogFormTogglingRef}
           >
             <NewBlog
+              ref={clearBlogCreationFieldsRef}
               createThisBlog={createBlog}
-              creationStatus={creationStatus}
             ></NewBlog>
           </Togglable>
           {blogs.map((blog) => (

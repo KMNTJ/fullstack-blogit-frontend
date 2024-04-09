@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 
 export const Blog = ({ blog }) => (
   <div>
@@ -6,18 +6,10 @@ export const Blog = ({ blog }) => (
   </div>
 );
 
-export const NewBlog = ({createThisBlog, creationStatus}) => {
+export const NewBlog = forwardRef(({ createThisBlog }, ref) => {
   const [author, setAuthor] = useState([]);
   const [title, setTitle] = useState([]);
   const [url, setUrl] = useState([]);
-
-  useEffect(() => {
-    if (creationStatus === "success") {
-      setAuthor("");
-      setTitle("");
-      setUrl("");
-    }
-  }, [creationStatus]);
 
   const handleCreateBlog = () => {
     let blog = {
@@ -26,6 +18,16 @@ export const NewBlog = ({createThisBlog, creationStatus}) => {
       url: url,
     };
     createThisBlog(blog);
+  };
+
+  useImperativeHandle(ref, () => {
+    return { clearInputFields };
+  });
+
+  const clearInputFields = () => {
+    setAuthor("");
+    setTitle("");
+    setUrl("");
   };
 
   return (
@@ -60,4 +62,4 @@ export const NewBlog = ({createThisBlog, creationStatus}) => {
       <button onClick={handleCreateBlog}>Create</button>
     </div>
   );
-};
+});
