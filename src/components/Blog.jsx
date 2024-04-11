@@ -1,11 +1,19 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
+import blogService from "../services/blogs";
 
-export const Blog = ({ blog }) => {
+export const Blog = ({ blog, handleUpdateBlogDisplay }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleDetailVisibility = () => {
     setShowDetails(!showDetails);
   };
+
+  const like = async () => {
+    blog.likes++;
+    const updated = await blogService.update(blog);
+    handleUpdateBlogDisplay(updated)
+  };
+
 
   const blogWrapStyle = {
     display: "flex",
@@ -26,8 +34,12 @@ export const Blog = ({ blog }) => {
         <div>
           <div>title: {blog.title}</div>
           <div>author: {blog.author}</div>
-          <div>url: {blog.url}</div>
+          <div>
+            url: {blog.url}
+            <button onClick={like}>like</button>
+          </div>
           <div>likes: {blog.likes}</div>
+          <div>adder: {blog.userId.name}</div>
         </div>
       ) : (
         <div>{blog.title}</div>

@@ -23,9 +23,26 @@ const createNew = async (blog) => {
   }
 };
 
+const update = async (blog) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const url = `${baseUrl}/${blog.id}`
+
+  try {
+    return await axios.put(url, blog, config);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
 };
 
-export default { getAll, setToken, createNew };
+export default { getAll, setToken, createNew, update };

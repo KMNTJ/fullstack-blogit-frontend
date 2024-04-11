@@ -1,21 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { Blog, NewBlog } from "./components/Blog";
-import { Togglable } from "./components/Togglable";
+import { BlogTopLevel } from "./components/BlogTopLevel";
 import Login from "./components/Login";
 import { EventMessage } from "./components/EventMessage";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState([]);
   const [password, setPassword] = useState([]);
   const [user, setUser] = useState(null);
   const [eventMessage, setEventMessage] = useState(null);
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedBlogAppUser");
@@ -65,28 +59,6 @@ const App = () => {
     });
   };
 
-  const blogFormTogglingRef = useRef();
-  const clearBlogCreationFieldsRef = useRef();
-
-  const createBlog = async (blog) => {
-    try {
-      const response = await blogService.createNew(blog);
-      const addedBlog = response.data;
-      setBlogs(blogs.concat(addedBlog));
-      clearBlogCreationFieldsRef.current.clearInputFields()
-      handleMessageDisplayEvent({
-        content: `Added a new blog: ${addedBlog.title} by author ${addedBlog.author}`,
-      });
-    } catch (error) {
-      console.log(error.message);
-      handleMessageDisplayEvent({
-        content: "Error on adding a blog",
-        type: "error",
-      });
-    }
-    blogFormTogglingRef.current.toggleDisplay();
-  };
-
   return (
     <div>
       <EventMessage key={eventMessage?.content} message={eventMessage} />
@@ -102,20 +74,8 @@ const App = () => {
         </div>
       ) : (
         <div>
-          <h2>blogs</h2>
           {user.name} logged in <button onClick={handleLogout}>logout</button>
-          <Togglable
-            buttonLabel={"Open Blog creation"}
-            ref={blogFormTogglingRef}
-          >
-            <NewBlog
-              ref={clearBlogCreationFieldsRef}
-              createThisBlog={createBlog}
-            ></NewBlog>
-          </Togglable>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          <BlogTopLevel></BlogTopLevel>
         </div>
       )}
     </div>
