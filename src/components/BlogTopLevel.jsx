@@ -3,16 +3,21 @@ import blogService from "../services/blogs";
 import { NewBlog } from "../components/Blog";
 import { Togglable } from "../components/Togglable";
 import { BlogList } from "../components/BlogList";
+import { sortByProperty } from "../utils/utils";
 
 export const BlogTopLevel = () => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      setBlogs(sortByProperty(blogs, "likes"));
+    });
   }, []);
 
   const handleUpdateBlogDisplay = (updatedBlog) => {
-    const updatedBlogs = blogs.map((b) => (b.id !== updatedBlog.id ? b : updatedBlog));
+    const updatedBlogs = blogs.map((b) =>
+      b.id !== updatedBlog.id ? b : updatedBlog
+    );
     setBlogs(updatedBlogs);
   };
 
