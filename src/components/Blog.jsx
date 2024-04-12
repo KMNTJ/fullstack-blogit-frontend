@@ -1,7 +1,11 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 import blogService from "../services/blogs";
 
-export const Blog = ({ blog, handleUpdateBlogDisplay }) => {
+export const Blog = ({
+  blog,
+  handleUpdateBlogDisplay,
+  handleRemovedBlogDisplay,
+}) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleDetailVisibility = () => {
@@ -11,9 +15,13 @@ export const Blog = ({ blog, handleUpdateBlogDisplay }) => {
   const like = async () => {
     blog.likes++;
     const updated = await blogService.update(blog);
-    handleUpdateBlogDisplay(updated)
+    handleUpdateBlogDisplay(updated);
   };
 
+  const removeBlog = async () => {
+    const removed = await blogService.remove(blog);
+    handleRemovedBlogDisplay(removed.data);
+  };
 
   const blogWrapStyle = {
     display: "flex",
@@ -40,6 +48,7 @@ export const Blog = ({ blog, handleUpdateBlogDisplay }) => {
           </div>
           <div>likes: {blog.likes}</div>
           <div>adder: {blog.userId.name}</div>
+          <button onClick={removeBlog}>remove</button>
         </div>
       ) : (
         <div>{blog.title}</div>

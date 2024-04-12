@@ -5,7 +5,7 @@ import { Togglable } from "../components/Togglable";
 import { BlogList } from "../components/BlogList";
 import { sortByProperty } from "../utils/utils";
 
-export const BlogTopLevel = () => {
+export const BlogTopLevel = ({ handleMessageDisplayEvent }) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
@@ -19,6 +19,13 @@ export const BlogTopLevel = () => {
       b.id !== updatedBlog.id ? b : updatedBlog
     );
     setBlogs(updatedBlogs);
+  };
+
+  const handleRemovedBlogDisplay = (removedBlog) => {
+    const blogsAfterRemove = blogs
+      .map((b) => b)
+      .filter((b) => b.id !== removedBlog.id);
+    setBlogs(blogsAfterRemove);
   };
 
   const blogFormTogglingRef = useRef();
@@ -55,6 +62,7 @@ export const BlogTopLevel = () => {
       <BlogList
         blogs={blogs}
         handleUpdateBlogDisplay={handleUpdateBlogDisplay}
+        handleRemovedBlogDisplay={handleRemovedBlogDisplay}
       ></BlogList>
     </div>
   );

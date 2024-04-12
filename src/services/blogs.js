@@ -23,6 +23,23 @@ const createNew = async (blog) => {
   }
 };
 
+const remove = async (blog) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const url = `${baseUrl}/${blog.id}`;
+
+  try {
+    return await axios.delete(url, config);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 const update = async (blog) => {
   const config = {
     headers: {
@@ -31,18 +48,18 @@ const update = async (blog) => {
     },
   };
 
-  const url = `${baseUrl}/${blog.id}`
+  const url = `${baseUrl}/${blog.id}`;
 
   try {
     return await axios.put(url, blog, config);
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
 };
 
-export default { getAll, setToken, createNew, update };
+export default { getAll, setToken, createNew, update, remove };
