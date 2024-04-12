@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 export const EventMessage = ({ message }) => {
   if (!message) return;
@@ -16,4 +16,8 @@ export const EventMessage = ({ message }) => {
   };
 
   return <div style={style}>{message.content}</div>;
+};
+
+EventMessage.propTypes = {
+  message: PropTypes.object,
 };

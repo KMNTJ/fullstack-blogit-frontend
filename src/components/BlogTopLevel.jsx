@@ -4,6 +4,7 @@ import { NewBlog } from "../components/Blog";
 import { Togglable } from "../components/Togglable";
 import { BlogList } from "../components/BlogList";
 import { sortByProperty } from "../utils/utils";
+import PropTypes from "prop-types";
 
 export const BlogTopLevel = ({ handleMessageDisplayEvent }) => {
   const [blogs, setBlogs] = useState([]);
@@ -66,4 +67,8 @@ export const BlogTopLevel = ({ handleMessageDisplayEvent }) => {
       ></BlogList>
     </div>
   );
+};
+
+BlogTopLevel.propTypes = {
+  handleMessageDisplayEvent: PropTypes.func.isRequired,
 };

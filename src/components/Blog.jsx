@@ -1,5 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 import blogService from "../services/blogs";
+import PropTypes from "prop-types";
 
 export const Blog = ({
   blog,
@@ -114,3 +115,13 @@ export const NewBlog = forwardRef(({ createThisBlog }, ref) => {
     </div>
   );
 });
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleUpdateBlogDisplay: PropTypes.func.isRequired,
+  handleRemovedBlogDisplay: PropTypes.func.isRequired,
+};
+
+NewBlog.propTypes = {
+  createThisBlog: PropTypes.func.isRequired,
+};
