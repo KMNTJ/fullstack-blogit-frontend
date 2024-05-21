@@ -1,5 +1,5 @@
-import { Blog } from "./Blog";
-import PropTypes from "prop-types";
+import { Blog } from './Blog'
+import PropTypes from 'prop-types'
 
 export const BlogList = ({
   blogs,
@@ -17,11 +17,11 @@ export const BlogList = ({
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
 BlogList.propTypes = {
   blogs: PropTypes.array.isRequired,
   handleRemovedBlogDisplay: PropTypes.func.isRequired,
   handleUpdateBlogDisplay: PropTypes.func.isRequired,
-};
+}

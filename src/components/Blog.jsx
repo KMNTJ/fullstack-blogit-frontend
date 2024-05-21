@@ -1,43 +1,43 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
-import blogService from "../services/blogs";
-import PropTypes from "prop-types";
+import { useState, forwardRef, useImperativeHandle } from 'react'
+import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 export const Blog = ({
   blog,
   handleUpdateBlogDisplay,
   handleRemovedBlogDisplay,
 }) => {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false)
 
   const toggleDetailVisibility = () => {
-    setShowDetails(!showDetails);
-  };
+    setShowDetails(!showDetails)
+  }
 
   const like = async () => {
-    blog.likes++;
-    const updated = await blogService.update(blog);
-    handleUpdateBlogDisplay(updated);
-  };
+    blog.likes++
+    const updated = await blogService.update(blog)
+    handleUpdateBlogDisplay(updated)
+  }
 
   const removeBlog = async () => {
-    const removed = await blogService.remove(blog);
-    handleRemovedBlogDisplay(removed.data);
-  };
+    const removed = await blogService.remove(blog)
+    handleRemovedBlogDisplay(removed.data)
+  }
 
   const blogWrapStyle = {
-    display: "flex",
-    margin: "2px",
-    padding: "2px",
-    borderColor: "black",
-    borderStyle: "solid",
-    borderWidth: "3px",
-    borderRadius: "5px",
-  };
+    display: 'flex',
+    margin: '2px',
+    padding: '2px',
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderWidth: '3px',
+    borderRadius: '5px',
+  }
 
   return (
     <div style={blogWrapStyle}>
       <button onClick={toggleDetailVisibility}>
-        {showDetails ? "close" : "view"}
+        {showDetails ? 'close' : 'view'}
       </button>
       {showDetails ? (
         <div>
@@ -55,32 +55,32 @@ export const Blog = ({
         <div>{blog.title}</div>
       )}
     </div>
-  );
-};
+  )
+}
 
 export const NewBlog = forwardRef(({ createThisBlog }, ref) => {
-  const [author, setAuthor] = useState([]);
-  const [title, setTitle] = useState([]);
-  const [url, setUrl] = useState([]);
+  const [author, setAuthor] = useState([])
+  const [title, setTitle] = useState([])
+  const [url, setUrl] = useState([])
 
   const handleCreateBlog = () => {
     let blog = {
       title: title,
       author: author,
       url: url,
-    };
-    createThisBlog(blog);
-  };
+    }
+    createThisBlog(blog)
+  }
 
   useImperativeHandle(ref, () => {
-    return { clearInputFields };
-  });
+    return { clearInputFields }
+  })
 
   const clearInputFields = () => {
-    setAuthor("");
-    setTitle("");
-    setUrl("");
-  };
+    setAuthor('')
+    setTitle('')
+    setUrl('')
+  }
 
   return (
     <div>
@@ -113,15 +113,17 @@ export const NewBlog = forwardRef(({ createThisBlog }, ref) => {
       </div>
       <button onClick={handleCreateBlog}>Create</button>
     </div>
-  );
-});
+  )
+})
+
+NewBlog.displayName = 'NewBlog'
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleUpdateBlogDisplay: PropTypes.func.isRequired,
   handleRemovedBlogDisplay: PropTypes.func.isRequired,
-};
+}
 
 NewBlog.propTypes = {
   createThisBlog: PropTypes.func.isRequired,
-};
+}

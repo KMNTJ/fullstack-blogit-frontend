@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types'
 
 const Login = ({
   username,
@@ -7,8 +7,8 @@ const Login = ({
   setPassword,
   handleLogin,
 }) => {
-  console.log("username", username);
-  console.log("password", password);
+  console.log('username', username)
+  console.log('password', password)
   return (
     <div>
       <h2>Please log in</h2>
@@ -34,14 +34,14 @@ const Login = ({
         <button type="submit">Login</button>
       </form>
     </div>
-  );
-};
+  )
+}
 Login.propTypes = {
   username: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   password: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   setUsername: PropTypes.func.isRequired,
   setPassword: PropTypes.func.isRequired,
   handleLogin: PropTypes.func.isRequired,
-};
+}
 
-export default Login;
+export default Login
