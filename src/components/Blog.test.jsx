@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { Blog } from './Blog'
+import { Blog, NewBlog } from './Blog'
 import userEvent from '@testing-library/user-event'
 import { expect } from 'vitest'
 
@@ -87,8 +87,32 @@ test('Pressing like button n times triggers n calls to like handler function', a
   await user.click(likeButton)
 
   expect(handleUpdateBlogDisplay.mock.calls).toHaveLength(3)
-
 })
 
+test('New blog creation handle is called with necessary values upon new blog creation', async () => {
+  const blog = {
+    title: 'blogiaihe',
+    author: 'kirjoittaja',
+    url: 'linkki',
+  }
 
+  const createThisBlog = vi.fn()
 
+  const { container } = render(<NewBlog createThisBlog={createThisBlog} />)
+
+  const titleInput = container.querySelector(`input[name="title"]`)
+  const authorInput = container.querySelector(`input[name="author"]`)
+  const urlInput = container.querySelector(`input[name="url"]`)
+
+  const user = userEvent.setup()
+  await user.type(titleInput, blog.title)
+  await user.type(authorInput, blog.author)
+  await user.type(urlInput, blog.url)
+
+  const createButton = screen.getByText('Create')
+  await user.click(createButton)
+
+  expect(createThisBlog.mock.calls).toHaveLength(1)
+  expect(createThisBlog.mock.calls[0][0]).toEqual(blog)
+  
+})
