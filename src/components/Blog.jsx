@@ -48,7 +48,7 @@ export const Blog = ({
             <button onClick={like}>like</button>
           </div>
           <div>likes: {blog.likes}</div>
-          <div>adder: {blog.userId.name}</div>
+          <div>adder: {blog.username}</div>
           <button onClick={removeBlog}>remove</button>
         </div>
       ) : (
