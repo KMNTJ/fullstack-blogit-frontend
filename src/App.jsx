@@ -76,6 +76,7 @@ const App = () => {
         <div>
           {user.name} logged in <button onClick={handleLogout}>logout</button>
           <BlogTopLevel
+            user={user}
             handleMessageDisplayEvent={handleMessageDisplayEvent}
           ></BlogTopLevel>
         </div>

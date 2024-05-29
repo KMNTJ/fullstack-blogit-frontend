@@ -6,7 +6,7 @@ import { BlogList } from '../components/BlogList'
 import { sortByProperty } from '../utils/utils'
 import PropTypes from 'prop-types'
 
-export const BlogTopLevel = ({ handleMessageDisplayEvent }) => {
+export const BlogTopLevel = ({ handleMessageDisplayEvent, user }) => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
@@ -61,6 +61,7 @@ export const BlogTopLevel = ({ handleMessageDisplayEvent }) => {
         ></NewBlog>
       </Togglable>
       <BlogList
+        user={user}
         blogs={blogs}
         handleUpdateBlogDisplay={handleUpdateBlogDisplay}
         handleRemovedBlogDisplay={handleRemovedBlogDisplay}

@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
 export const Blog = ({
+  user,
   blog,
   handleUpdateBlogDisplay,
   handleRemovedBlogDisplay,
@@ -49,7 +50,9 @@ export const Blog = ({
           </div>
           <div>likes: {blog.likes}</div>
           <div>adder: {blog.username}</div>
-          <button onClick={removeBlog}>remove</button>
+          {user.username == blog.username ? (
+            <button onClick={removeBlog}>remove</button>
+          ) : null}
         </div>
       ) : (
         <div>{blog.title}</div>

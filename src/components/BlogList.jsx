@@ -2,6 +2,7 @@ import { Blog } from './Blog'
 import PropTypes from 'prop-types'
 
 export const BlogList = ({
+  user,
   blogs,
   handleUpdateBlogDisplay,
   handleRemovedBlogDisplay,
@@ -10,6 +11,7 @@ export const BlogList = ({
     <div>
       {blogs.map((blog) => (
         <Blog
+          user={user}
           key={blog.id}
           blog={blog}
           handleUpdateBlogDisplay={handleUpdateBlogDisplay}
